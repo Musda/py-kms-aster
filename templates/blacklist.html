@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}blacklist{% endblock %}
+
+{% block style %}
+th {
+    white-space: nowrap;
+}
+{% endblock %}
+
+{% block content %}
+{% if error %}
+<article class="message is-danger">
+    <div class="message-header">
+        Whoops! Something went wrong...
+    </div>
+    <div class="message-body">
+        {{ error }}
+    </div>
+</article>
+{% else %}
+<nav class="level">
+<div class="level-item has-text-centered">
+        <div>
+            <p class="heading">Client</p>
+            <p class="title"><a href="/">View</a></p>
+        </div>
+    </div>
+    <div class="level-item has-text-centered">
+        <div>
+            <p class="heading">Blacklist</p>
+            <p class="title"><a href="/blacklist">{{ count_blacklist }}</a></p>
+        </div>
+    </div>
+</nav>
+
+<hr>
+
+{% if clients %}
+<table class="table is-striped is-hoverable is-fullwidth">
+    <thead>
+        <tr>
+            <th>Client ID</th>
+            <th>Machine Name</th>
+            <th>Add Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for blacklist in blacklists %}
+        <tr>
+            <th><pre class="clientMachineId">{{ blacklist.clientMachineId }}</pre></th>
+            <td class="machineName">
+                {% if client.machineName | length > 16 %}
+                <abbr title="{{ blacklist.machineName }}">{{ blacklist.machineName | truncate(16, True, '...') }}</abbr>
+                {% else %}
+                {{ blacklist.machineName }}
+                {% endif %}
+            </td>
+            <td class="convert_timestamp">{{ blacklist.addTime }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<article class="message is-warning">
+    <div class="message-header">
+        <p>Whoops?</p>
+    </div>
+    <div class="message-body">
+        No blacklisted client.
+    </div>
+</article>
+{% endif %}
+{% endif %}
+{% endblock %}
